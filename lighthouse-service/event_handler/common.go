@@ -3,6 +3,12 @@ package event_handler
 import (
 	"context"
 	"errors"
+	"fmt"
+	"net/url"
+	"os"
+	"strings"
+	"sync"
+
 	cloudevents "github.com/cloudevents/sdk-go/v2"
 	keptnapimodels "github.com/keptn/go-utils/pkg/api/models"
 	logger "github.com/sirupsen/logrus"
@@ -10,10 +16,6 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	"net/url"
-	"os"
-	"strings"
-	"sync"
 
 	utils "github.com/keptn/go-utils/pkg/api/utils"
 	keptn "github.com/keptn/go-utils/pkg/lib"
@@ -116,7 +118,7 @@ func parseSLO(input []byte) (*keptn.ServiceLevelObjectives, error) {
 	err := yaml.Unmarshal([]byte(input), &slo)
 
 	if err != nil {
-		return nil, err
+		return nil, fmt.Errorf(err.Error())
 	}
 
 	if slo.Comparison == nil {
